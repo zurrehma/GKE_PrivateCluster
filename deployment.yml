@@ -1,0 +1,87 @@
+apiVersion: apps/v1 #creation of deployment which posses pods. see deployments in detail
+# here (https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+kind: Deployment
+metadata:
+   name: tomcat-image
+   labels:
+    app: tomcat-image
+spec:
+  
+  selector:
+    matchLabels:
+      app: tomcat-image
+  template:
+    metadata:
+      labels:
+        app: tomcat-image
+    spec:
+      containers:
+      - name: tomcat-image
+        image: gcr.io/gke-project-262306/tomcat
+        ports:
+        - containerPort: 8080
+---
+apiVersion: apps/v1 #creation of deployment which posses pods. see deployments in detail
+# here (https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+kind: Deployment
+metadata:
+   name: springboot-image
+   labels:
+    app: springboot-image
+spec:
+  
+  selector:
+    matchLabels:
+      app: springboot-image
+  template:
+    metadata:
+      labels:
+        app: springboot-image
+    spec:
+      containers:
+      - name: springboot-image
+        image: gcr.io/gke-project-262306/springio/gs-spring-boot-docker
+        ports:
+        - containerPort: 8080
+        resources:
+          requests: 
+            cpu: 200m
+
+---
+    # Loadbalancer service creation for accessing tomcat pod over the network
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat-service
+spec:
+ # type: LoadBalancer
+  selector:
+    app: tomcat-image
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-service
+spec:
+  selector:
+    app: springboot-image
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: springboot-image-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: springboot-image
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 5
+  

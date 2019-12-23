@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-resource
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2  
+    #  nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /tomcat(/|$)(.*)
+        backend:
+          serviceName: tomcat-service
+          servicePort: 8080
+     # - path: /hpa(/|$)(.*)
+      #  backend:
+      #    serviceName: hpa-demo-web-service
+      #    servicePort: 8080
+      - path: /spring(/|$)(.*)
+        backend:
+          serviceName: springboot-service
+          servicePort: 8080
+     
