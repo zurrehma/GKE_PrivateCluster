@@ -1,7 +1,7 @@
 # GKE_PrivateCluster
 This repo contains three configuration files.
 * GKE_template.yml (responsible for creation of private cluster inside gcp)
-* deployment.yml (responsib for creation of [deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/),
+* deployment.yml (responsible for creation of [deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/),
 [service](https://kubernetes.io/docs/concepts/services-networking/service/) and  [HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/))
 * ingress-resource.yaml (responsible for creation of [ingress-controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/])
 ## prerequisites
@@ -30,7 +30,7 @@ This repo contains three configuration files.
 * Download and install helm-chart(helm-chart contains configurations for installing nginx-ingress controller) <br/>
 In this case cluster is private, so when we install helm-chart from offical reposiotry it try to download docker image. <br/>
  Therfore, we have to either enable NAT or change the helm-chart configurations.<br/>
-In our case we are changing helm-chart configurations,so we can use same docker image from gcr registry which is accessable by cluster<br/>
+In our case we are changing helm-chart configurations,so we can use same docker image from gcr registry which is accessible by cluster<br/>
    **docker pull quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1 <br/>
    docker tag quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1 gcr.io/[ProjectID]/nginx-ingress:latest <br/>
    docker push gcr.io/[ProjectID]/nginx-ingress**
